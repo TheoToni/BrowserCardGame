@@ -14,6 +14,10 @@ function Character(data) {
       .join("");
   };
 
+  this.takeDamage = function () {
+    console.log(`${this.name} is damaged`);
+  };
+
   this.getCharacterHtml = function () {
     const { elementId, name, avatar, health, diceCount, diceArray } = this;
     let diceHtml = this.getDiceHtml(diceCount);
