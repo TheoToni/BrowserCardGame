@@ -14,8 +14,12 @@ function Character(data) {
       .join("");
   };
 
-  this.takeDamage = function () {
-    console.log(`${this.name} is damaged`);
+  this.takeDamage = function (attackScoreArray) {
+    const totalAttackScore = attackScoreArray.reduce(function (total, num) {
+      return total + num;
+    });
+
+    this.health -= totalAttackScore;
   };
 
   this.getCharacterHtml = function () {
