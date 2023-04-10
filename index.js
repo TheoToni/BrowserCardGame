@@ -5,16 +5,10 @@ let monstersArray = ["orc", "demon", "goblin"];
 
 function getNewMonster() {
   const nextMonsterData = characterData[monstersArray.shift()];
+  document.getElementById("attack-button").disabled = false;
+
   return nextMonsterData ? new Character(nextMonsterData) : {};
 }
-
-/*
-Challenge
-1. Add a pause of 1 second between a monster dying and
-another monster taking it's place.
-2. Add a pause of 1.5 seconds between the last monster 
-or the wizard dying, and the endMessage being displayed.
-*/
 
 function attack() {
   wizard.getDiceHtml();
@@ -26,6 +20,7 @@ function attack() {
   if (wizard.dead) {
     endGame();
   } else if (monster.dead) {
+    document.getElementById("attack-button").disabled = true;
     if (monstersArray.length > 0) {
       setTimeout(() => {
         monster = getNewMonster();
@@ -38,6 +33,8 @@ function attack() {
 }
 
 function endGame() {
+  document.getElementById("attack-button").disabled = true;
+
   const endMessage =
     wizard.health === 0 && monster.health === 0
       ? "No victors - all creatures are dead"
