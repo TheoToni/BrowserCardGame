@@ -29,7 +29,13 @@ function Character(data) {
 
   this.getHealthBarHtml = function () {
     const percent = getPercentage(this.health, this.maxHealth);
-    console.log(percent);
+
+    return `
+        <div class="health-bar-outer">
+            <div class="health-bar-inner ${percent < 26 ? "danger" : ""} " 
+            style="width: ${percent}%;">
+            </div>
+        </div>`;
   };
 
   this.getCharacterHtml = function () {
@@ -40,6 +46,7 @@ function Character(data) {
                 <h4 class="name"> ${name} </h4>
                 <img class="avatar" src="${avatar}" />
                 <div class="health">health: <b> ${health} </b></div>
+                ${healthBar}
                 <div class="dice-container">
                     ${this.diceArray}
                 </div>
