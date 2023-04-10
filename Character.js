@@ -1,7 +1,11 @@
 import { getDiceRollArray, getDicePlaceholderHtml } from "./utils.js";
 
+const getPercentage = (remainingHealth, maximumHealth) =>
+  (100 * remainingHealth) / maximumHealth;
+
 function Character(data) {
   Object.assign(this, data);
+  this.maxHealth = this.health;
 
   this.diceArray = getDicePlaceholderHtml(this.diceCount);
 
@@ -23,9 +27,14 @@ function Character(data) {
     }
   };
 
+  this.getHealthBarHtml = function () {
+    const percent = getPercentage(this.health, this.maxHealth);
+    console.log(percent);
+  };
+
   this.getCharacterHtml = function () {
     const { elementId, name, avatar, health, diceCount } = this;
-
+    const healthBar = this.getHealthBarHtml();
     return `
             <div class="character-card">
                 <h4 class="name"> ${name} </h4>
