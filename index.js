@@ -1,12 +1,22 @@
 import characterData from "./data.js";
 import Character from "./Character.js";
 
+let monstersArray = ["orc", "demon", "goblin"];
+
+function getNewMonster() {
+  characterData[monstersArray.shift()];
+}
+
 function attack() {
   wizard.getDiceHtml();
   orc.getDiceHtml();
   wizard.takeDamage(orc.currentDiceScore);
   orc.takeDamage(wizard.currentDiceScore);
   render();
+
+  if (wizard.dead || orc.dead) {
+    endGame();
+  }
 }
 
 function endGame() {
@@ -19,12 +29,12 @@ function endGame() {
 
   const endEmoji = wizard.health > 0 ? "🔮" : "☠️";
   document.body.innerHTML = `
-                <div class="end-game">
-                    <h2>Game Over</h2> 
-                    <h3>${endMessage}</h3>
-                    <p class="end-emoji">${endEmoji}</p>
-                </div>
-                `;
+        <div class="end-game">
+            <h2>Game Over</h2> 
+            <h3>${endMessage}</h3>
+            <p class="end-emoji">${endEmoji}</p>
+        </div>
+        `;
 }
 
 document.getElementById("attack-button").addEventListener("click", attack);
