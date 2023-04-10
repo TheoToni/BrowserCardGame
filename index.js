@@ -1,19 +1,21 @@
 import characterData from "./data.js";
 import Character from "./Character.js";
 
-/*
-Challenge
-1. See if you can get the app to work with just 
-one monster again.
-**hint.md for help!!**
-*/
-
 let monstersArray = ["orc", "demon", "goblin"];
 
 function getNewMonster() {
   const nextMonsterData = characterData[monstersArray.shift()];
   return nextMonsterData ? new Character(nextMonsterData) : {};
 }
+
+/*
+Challenge
+1. Change the attack function so that when a monster dies, 
+the next monster replaces it. If there are no more monsters,
+call endGame(). 
+2. Make sure that endGame() still gets called if the wizard
+is killed.
+*/
 
 function attack() {
   wizard.getDiceHtml();
@@ -22,8 +24,16 @@ function attack() {
   monster.takeDamage(wizard.currentDiceScore);
   render();
 
-  if (wizard.dead || monster.dead) {
+  /*change the code below this line*/
+  if (wizard.dead) {
     endGame();
+  } else if (monster.dead) {
+    if (monstersArray.length > 0) {
+      monster = getNewMonster();
+      render();
+    } else {
+      endGame();
+    }
   }
 }
 
@@ -37,12 +47,12 @@ function endGame() {
 
   const endEmoji = wizard.health > 0 ? "🔮" : "☠️";
   document.body.innerHTML = `
-                <div class="end-game">
-                    <h2>Game Over</h2> 
-                    <h3>${endMessage}</h3>
-                    <p class="end-emoji">${endEmoji}</p>
-                </div>
-                `;
+        <div class="end-game">
+            <h2>Game Over</h2> 
+            <h3>${endMessage}</h3>
+            <p class="end-emoji">${endEmoji}</p>
+        </div>
+        `;
 }
 
 document.getElementById("attack-button").addEventListener("click", attack);
