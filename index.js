@@ -2,45 +2,46 @@ import characterData from "./data.js";
 import Character from "./Character.js";
 
 let monstersArray = ["orc", "demon", "goblin"];
+let isWaiting = false;
 
 function getNewMonster() {
   const nextMonsterData = characterData[monstersArray.shift()];
-  document.getElementById("attack-button").disabled = false;
-
   return nextMonsterData ? new Character(nextMonsterData) : {};
 }
 
 function attack() {
-  wizard.getDiceHtml();
-  monster.getDiceHtml();
-  wizard.takeDamage(monster.currentDiceScore);
-  monster.takeDamage(wizard.currentDiceScore);
-  render();
+  if (!isWaiting) {
+    wizard.setDiceHtml();
+    monster.setDiceHtml();
+    wizard.takeDamage(monster.currentDiceScore);
+    monster.takeDamage(wizard.currentDiceScore);
+    render();
 
-  if (wizard.dead) {
-    endGame();
-  } else if (monster.dead) {
-    document.getElementById("attack-button").disabled = true;
-    if (monstersArray.length > 0) {
-      setTimeout(() => {
-        monster = getNewMonster();
-        render();
-      }, 1500);
-    } else {
+    if (wizard.dead) {
       endGame();
+    } else if (monster.dead) {
+      isWaiting = true;
+      if (monstersArray.length > 0) {
+        setTimeout(() => {
+          monster = getNewMonster();
+          render();
+          isWaiting = false;
+        }, 1500);
+      } else {
+        endGame();
+      }
     }
   }
 }
 
 function endGame() {
-  document.getElementById("attack-button").disabled = true;
-
+  isWaiting = true;
   const endMessage =
     wizard.health === 0 && monster.health === 0
       ? "No victors - all creatures are dead"
       : wizard.health > 0
       ? "The Wizard Wins"
-      : "The Orc is Victorious";
+      : "The monsters are Victorious";
 
   const endEmoji = wizard.health > 0 ? "🔮" : "☠️";
   setTimeout(() => {
